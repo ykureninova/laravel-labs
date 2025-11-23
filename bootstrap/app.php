@@ -16,4 +16,16 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
+
+        $schedule->command('app:expire-old-tasks')
+            ->daily()
+            ->appendOutputTo(storage_path('logs/scheduler.log'));
+
+        $schedule->command('app:generate-report --file')
+            ->weeklyOn(1, '09:00')
+            ->appendOutputTo(storage_path('logs/scheduler.log'));
+
+    })
+    ->create();
