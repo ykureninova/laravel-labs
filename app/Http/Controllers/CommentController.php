@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentCreated;
 use App\Models\Comment;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -26,6 +27,8 @@ class CommentController extends Controller
             'author_id' => $request->user()->id,
             'body' => $data['body'],
         ]);
+
+        CommentCreated::dispatch($comment);
 
         return response()->json($comment, 201);
     }
