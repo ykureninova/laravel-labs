@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TaskCreated;
 use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -46,6 +47,8 @@ class TaskController extends Controller
         $data['author_id'] = $request->user()->id;
 
         $task = Task::create($data);
+
+        TaskCreated::dispatch($task);
 
         return response()->json($task, 201);
     }
