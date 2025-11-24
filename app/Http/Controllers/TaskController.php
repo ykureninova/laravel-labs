@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\TaskCreated;
+use App\Events\TaskUpdated;
 use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -67,6 +68,9 @@ class TaskController extends Controller
         }
 
         $task->update($request->only(['title', 'description', 'status', 'priority', 'due_date']));
+
+        TaskUpdated::dispatch($task);
+
         return response()->json($task);
     }
 
